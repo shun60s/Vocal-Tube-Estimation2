@@ -15,7 +15,7 @@ It will save pks_dpks_stack_tube_use_ratio3.npz.
 
 estimate three tubes model from peak frequency.  
 ```
-python3 pks2tube3.py   
+python pks2tube3.py   
 ```
 It will show an example of three tube area and tube length.    
 

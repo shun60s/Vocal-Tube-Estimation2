@@ -18,7 +18,7 @@ estimate three tubes model from peak frequency.
 python pks2tube3.py  --peaks [ list of three peak frequency]
 ```
 It will show an example of three tube area and tube length.  
-In frequency response figure, red dot mark means target peak frequency, and cyan x mark means estimation result. They may differ some.  
+In frequency response figure, cyan x mark means target peak frequency, and red dot mark means estimation result. They may differ some.  'min cost' means average of their difference.   
 
 Example 1  
 ```

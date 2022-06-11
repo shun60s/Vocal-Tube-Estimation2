@@ -26,7 +26,7 @@ from pre_compute3 import *
 
 
 
-def show_figure1(tube, peaks_target, fmin0, LA0):
+def show_figure1(tube, peaks_target, drop_peaks_target, fmin0, LA0):
     # comparison frequency response of tube with target
     
     NUM_TUBE= tube.NUM_TUBE
@@ -39,7 +39,8 @@ def show_figure1(tube, peaks_target, fmin0, LA0):
     # tube spectrum
     ax1.semilogy(tube.f, tube.response, 'b', ms=2)
     ax1.semilogy(tube.f[tube.peaks_list] , tube.response[tube.peaks_list], 'ro', ms=3)
-    ax1.semilogy(tube.f[tube.drop_peaks_list] , tube.response[tube.drop_peaks_list], 'co', ms=3)
+    if drop_peaks_target is not None:
+        ax1.semilogy(tube.f[tube.drop_peaks_list] , tube.response[tube.drop_peaks_list], 'co', ms=3)
     
     
     xw= 2.0 * np.pi * peaks_target
@@ -85,12 +86,11 @@ def show_figure1(tube, peaks_target, fmin0, LA0):
 if __name__ == '__main__':
     #
     parser = argparse.ArgumentParser(description='estimation three tube model ')
-    parser.add_argument('--result_dir', '-r', default='result_figure', help='specify result directory')
+    parser.add_argument('--peaks',  nargs="*",  type=float, help='a list of peak frequency. example --peak 531 673 815 ') 
     args = parser.parse_args()
     
     
     NUM_TUBE=3
-    
     
     # instance
     tube= compute_tube_peak(NUM_TUBE=NUM_TUBE)  #, disp=True)
@@ -102,8 +102,18 @@ if __name__ == '__main__':
     
     if 1:
         # set expect target value
-        peaks_target=np.array([531,673,815 ])
-        drop_peaks_target=np.array([590,750,1350])
+        if args.peaks is not None:
+            if len(args.peaks) != 3:
+                print ('error: len(peaks) must be 3, due to three tube model.')
+                sys.exit()
+            else:
+                peaks_target=np.array(args.peaks) 
+        else:  # defualt peaks value
+            peaks_target=np.array([531,673,815 ])
+        
+        # drop_peaks_target=np.array([590,750,1350])
+        drop_peaks_target=None 
+        
         
         # get minimun cost at grid
         X = pc1.get_min_cost_candidate(peaks_target,drop_peaks_target, symmetry=True, disp=False)
@@ -120,4 +130,4 @@ if __name__ == '__main__':
             print ('warnflag is not 0')
         
         tube(res_brute[0]) 
-        show_figure1(tube, peaks_target, res_brute[1], res_brute[0])
+        show_figure1(tube, peaks_target, drop_peaks_target, res_brute[1], res_brute[0])

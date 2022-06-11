@@ -124,9 +124,12 @@ class pre_comute(object):
             peaks_target_ratio= peaks_target/peaks_target[0]
             peaks_target_ratio[0]=peaks_target[0]
             peaks_target2=peaks_target_ratio
-            drop_peaks_target_ratio= drop_peaks_target/drop_peaks_target[0]
-            drop_peaks_target_ratio[0]=drop_peaks_target[0]
-            drop_peaks_target2=drop_peaks_target_ratio
+            if drop_peaks_target is not None:
+                drop_peaks_target_ratio= drop_peaks_target/drop_peaks_target[0]
+                drop_peaks_target_ratio[0]=drop_peaks_target[0]
+                drop_peaks_target2=drop_peaks_target_ratio
+            else:
+                drop_peaks_target2 =None
         else:
             peaks_target2=peaks_target
             drop_peaks_target2=drop_peaks_target

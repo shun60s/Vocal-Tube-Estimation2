@@ -205,9 +205,15 @@ class compute_tube_peak(object):
         if USE_COST_RATIO:
             # Use only ratio portion, that is [1:]
             # 周波数の比である2番目以降の要素を使って計算する。
-            return (abs(peaks[1:] - peaks2[1:]).mean() + abs(drop_peaks[1:] - drop_peaks2[1:]).mean()) / 2.0
+            if drop_peaks is None:
+                return abs(peaks[1:] - peaks2[1:]).mean() 
+            else:
+                return (abs(peaks[1:] - peaks2[1:]).mean() + abs(drop_peaks[1:] - drop_peaks2[1:]).mean()) / 2.0
         else:
-            return (abs(peaks - peaks2).mean() + abs(drop_peaks - drop_peaks2).mean()) / 2.0
+            if drop_peaks is None:
+                return abs(peaks - peaks2).mean()
+            else:
+                return (abs(peaks - peaks2).mean() + abs(drop_peaks - drop_peaks2).mean()) / 2.0
         
 
     def calc_cost(self, X , peaks, drop_peaks, display_count=100, disp=False):

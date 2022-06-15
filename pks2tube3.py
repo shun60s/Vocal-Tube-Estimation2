@@ -50,26 +50,42 @@ def show_figure1(tube, peaks_target, drop_peaks_target, fmin0, LA0):
     
     ax2 = fig.add_subplot(212)
     
-    #if len(LA0) == 6 or len(LA0) == 5:  # X=[L1,L2,L3,A1,A2,A3] or X=[L1,L2,L3,r1,r2]   when three tube model
-    L1= LA0[0]
-    L2= LA0[1]
-    L3= LA0[2]
-    
-    if len(LA0) == 6:
-        A1= LA0[3]
-        A2= LA0[4]
-        A3= LA0[5]
-    else:
-        A1, A2, A3 = get_A1A2A3( LA0[3], LA0[4] )
-    
-    print ('L1,L2,L3', L1, L2, L3)
-    print ('A1,A2,A3', A1, A2, A3)
-    
+    if len(LA0) == 6 or len(LA0) == 5:  # X=[L1,L2,L3,A1,A2,A3] or X=[L1,L2,L3,r1,r2]   when three tube model
+        L1= LA0[0]
+        L2= LA0[1]
+        L3= LA0[2]
+        
+        if len(LA0) == 6:
+            A1= LA0[3]
+            A2= LA0[4]
+            A3= LA0[5]
+        else:
+            A1, A2, A3 = get_A1A2A3( LA0[3], LA0[4] )
+        
+        print ('L1,L2,L3', L1, L2, L3)
+        print ('A1,A2,A3', A1, A2, A3)
+        
+        
+    elif len(LA0) == 4 or len(LA0) == 3:  # L1,L2,r1 X=[L1,L2,A1,A2] or X=[L1,L2,r1] two tube model
+        L1= LA0[0]
+        L2= LA0[1]
+        L3= 0
+        if len(LA0) == 4:
+            A1= LA0[2]
+            A2= LA0[3]
+        else:
+            A1, A2 = get_A1A2( LA0[2] )
+        A3=0
+        
+        print ('L1,L2', L1, L2)
+        print ('A1,A2', A1, A2)
+        
     ax2.add_patch( patches.Rectangle((0, -0.5* A1), L1, A1, hatch='/', fill=False))
     ax2.add_patch( patches.Rectangle((L1, -0.5* A2), L2, A2, hatch='/', fill=False))
     ax2.add_patch( patches.Rectangle((L1+L2, -0.5* A3), L3, A3, hatch='/', fill=False))
     ax2.set_xlim([0, L1+L2+L3+5])
     ax2.set_ylim([(max(A1,A2,A3)*0.5+5)*-1, max(A1,A2,A3)*0.5+5 ])
+    
     
     ax2.set_title('cross-section area')
     plt.xlabel('Length [cm]')
@@ -85,31 +101,46 @@ def show_figure1(tube, peaks_target, drop_peaks_target, fmin0, LA0):
 
 if __name__ == '__main__':
     #
-    parser = argparse.ArgumentParser(description='estimation three tube model ')
-    parser.add_argument('--peaks',  nargs="*",  type=float, help='a list of peak frequency. example --peak 531 673 815 ') 
+    parser = argparse.ArgumentParser(description='estimation three or two tube model ')
+    parser.add_argument('--peaks',  nargs="*",  type=float, help='a list of peak frequency. example --peak 531 673 815  or --peak 770 1100 ') 
     args = parser.parse_args()
     
     
+    
+    
+    # instance three tube model
     NUM_TUBE=3
-    
-    # instance
-    tube= compute_tube_peak(NUM_TUBE=NUM_TUBE)  #, disp=True)
-    
+    tube3= compute_tube_peak(NUM_TUBE=NUM_TUBE)  #, disp=True)
     # load pre-computed grid data
     path0= 'pks_dpks_stack_tube_use_ratio' + str(NUM_TUBE) + '.npz'
-    pc1= pre_comute(tube, path0=path0)
+    pc3= pre_comute(tube3, path0=path0)
     
+    # instance two tube model
+    NUM_TUBE=2
+    tube2= compute_tube_peak(NUM_TUBE=NUM_TUBE)  #, disp=True)
+    # load pre-computed grid data
+    path0= 'pks_dpks_stack_tube_use_ratio' + str(NUM_TUBE) + '.npz'
+    pc2= pre_comute(tube2, path0=path0)
     
     if 1:
         # set expect target value
         if args.peaks is not None:
-            if len(args.peaks) != 3:
-                print ('error: len(peaks) must be 3, due to three tube model.')
-                sys.exit()
+            if len(args.peaks) == 3:
+                peaks_target=np.array(args.peaks)
+                tube=tube3
+                pc1=pc3
+            elif len(args.peaks) == 2:
+                peaks_target=np.array(args.peaks)
+                tube=tube2
+                pc1=pc2
             else:
-                peaks_target=np.array(args.peaks) 
+                print ('error: len(peaks) must be 2 or 3.')
+                sys.exit()
+        
         else:  # defualt peaks value
             peaks_target=np.array([531,673,815 ])
+            tube=tube3
+            pc1=pc3
         
         # drop_peaks_target=np.array([590,750,1350])
         drop_peaks_target=None 

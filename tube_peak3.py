@@ -216,15 +216,15 @@ class compute_tube_peak(object):
                 return (abs(peaks - peaks2).mean() + abs(drop_peaks - drop_peaks2).mean()) / 2.0
         
 
-    def calc_cost(self, X , peaks, drop_peaks, display_count=100, disp=False):
+    def calc_cost(self, X , peaks, drop_peaks, display_count=100, disp=False, OVER_VALUE=0.95):
         # get mean of difference between target and new computed ones
         peaks2, drop_peaks2= self.__call__(X)
         cost0= self.cost_0( peaks2, drop_peaks2, peaks, drop_peaks, USE_COST_RATIO=False )
         
-        # add penalty if reflection coefficient abs is over than 0.9
-        if len(X) == 3 and abs( X[2]) > 0.9:
+        # add penalty if reflection coefficient abs is over than OVER_VALUE
+        if len(X) == 3 and abs( X[2]) > OVER_VALUE:
             cost0 += 1000.0
-        elif len(X) == 5 and  ( abs( X[3]) > 0.9  or abs( X[4] > 0.9) ):
+        elif len(X) == 5 and  ( abs( X[3]) > OVER_VALUE  or abs( X[4] > OVER_VALUE) ):
             cost0 += 1000.0
         
         if disp :

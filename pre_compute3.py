@@ -166,9 +166,13 @@ class pre_comute(object):
         if self.USE_COST_RATIO:
             z= self.iters_stack[ self.rank_index[select_index]].copy()
             ratio0= self.peaks_detail_stack[self.rank_index[select_index]][0] / peaks_target[0]
-            z[0]=z[0] * ratio0  # modified L1
-            z[1]=z[1] * ratio0  # modified L2
-            z[2]=z[2] * ratio0  # modified L3
+            if self.iters_stack.shape[1] == 3:  # two tube
+                z[0]=z[0] * ratio0  # modified L1
+                z[1]=z[1] * ratio0  # modified L2
+            elif self.iters_stack.shape[1] == 5:  # three tube
+                z[0]=z[0] * ratio0  # modified L1
+                z[1]=z[1] * ratio0  # modified L2
+                z[2]=z[2] * ratio0  # modified L3
             return z
         else:
             return self.iters_stack[ self.rank_index[select_index]].copy()
@@ -179,16 +183,20 @@ if __name__ == '__main__':
     from tube_peak3 import *
     
     parser = argparse.ArgumentParser(description='make precomputed data to estimate tube model')
+    parser.add_argument('--tube',  '-t', type=int, default=3, help='specify number of tube, 2 or 3')
     args = parser.parse_args()
     
     
-    # try three tube model
-    NUM_TUBE=3   
-    
-    Whole_tube_length= 10.  # specify  whole tube length. This version is using frequency ratio.
-    LA_ranges=(slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(-0.9, 0.9, 0.1),slice(-0.9, 0.9, 0.1)) 
-    
-
+    if args.tube == 3:  # try three tube model
+        NUM_TUBE=3
+        
+        Whole_tube_length= 10.  # specify  whole tube length. This version is using frequency ratio.
+        LA_ranges=(slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(-0.9, 0.9, 0.1),slice(-0.9, 0.9, 0.1)) 
+    elif args.tube == 2:  # two tube model
+        NUM_TUBE=2
+        
+        Whole_tube_length= 10.  # specify  whole tube length. This version is using frequency ratio.
+        LA_ranges=(slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(-0.9, 0.9, 0.1))
     
     # instance
     tube= compute_tube_peak(NUM_TUBE=NUM_TUBE)  #, disp=True)

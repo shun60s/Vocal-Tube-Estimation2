@@ -80,6 +80,9 @@ class pre_comute(object):
                 elif len(param0) <= 6: # three tube
                     if np.array(param0[0:3]).sum() != self.MAX_tube_length:
                         continue
+                elif len(param0) <= 8: # four tube
+                    if np.array(param0[0:4]).sum() != self.MAX_tube_length:
+                        continue
             else:
                 # skip compute if whole tube length is over than max_tube_length
                 if len(param0) <= 4: # two tube
@@ -87,6 +90,9 @@ class pre_comute(object):
                         continue
                 elif len(param0) <= 6: # three tube
                     if np.array(param0[0:3]).sum() > self.MAX_tube_length: 
+                        continue
+                elif len(param0) <= 8: # four tube
+                    if np.array(param0[0:4]).sum() > self.MAX_tube_length: 
                         continue
             
             peaks_detail, drop_peaks_detail= tube( param0)
@@ -173,6 +179,11 @@ class pre_comute(object):
                 z[0]=z[0] * ratio0  # modified L1
                 z[1]=z[1] * ratio0  # modified L2
                 z[2]=z[2] * ratio0  # modified L3
+            elif self.iters_stack.shape[1] == 7:  # four tube
+                z[0]=z[0] * ratio0  # modified L1
+                z[1]=z[1] * ratio0  # modified L2
+                z[2]=z[2] * ratio0  # modified L3
+                z[3]=z[3] * ratio0  # modified L4
             return z
         else:
             return self.iters_stack[ self.rank_index[select_index]].copy()
@@ -183,11 +194,18 @@ if __name__ == '__main__':
     from tube_peak3 import *
     
     parser = argparse.ArgumentParser(description='make precomputed data to estimate tube model')
-    parser.add_argument('--tube',  '-t', type=int, default=3, help='specify number of tube, 2 or 3')
+    parser.add_argument('--tube',  '-t', type=int, default=3, help='specify number of tube, 2 or 3 or 4')
     args = parser.parse_args()
     
     
-    if args.tube == 3:  # try three tube model
+    if args.tube == 4:  # try four tube model
+        NUM_TUBE=4
+        
+        Whole_tube_length= 10.  # specify  whole tube length. This version is using frequency ratio.
+        #LA_ranges=(slice(1.0,Whole_tube_length,1.0),slice(1.0,Whole_tube_length,1.0),slice(1.0,Whole_tube_length,1.0),slice(1.0,Whole_tube_length,1.0),slice(-0.9, 0.9, 0.3),slice(-0.9, 0.9, 0.3),slice(-0.9, 0.9, 0.3)) 
+        LA_ranges=(slice(1.0,Whole_tube_length,1.0),slice(1.0,Whole_tube_length,1.0),slice(1.0,Whole_tube_length,1.0),slice(1.0,Whole_tube_length,1.0),slice(-0.9, 0.9, 0.15),slice(-0.9, 0.9, 0.15),slice(-0.9, 0.9, 0.15)) 
+        #LA_ranges=(slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(0.5,Whole_tube_length,0.5),slice(-0.9, 0.9, 0.1),slice(-0.9, 0.9, 0.1),slice(-0.9, 0.9, 0.1)) 
+    elif args.tube == 3:  # try three tube model
         NUM_TUBE=3
         
         Whole_tube_length= 10.  # specify  whole tube length. This version is using frequency ratio.

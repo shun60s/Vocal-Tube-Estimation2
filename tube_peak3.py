@@ -290,9 +290,9 @@ class compute_tube_peak(object):
         # add penalty if reflection coefficient abs is over than OVER_VALUE
         if len(X) == 3 and abs( X[2]) > OVER_VALUE:
             cost0 += 1000.0
-        elif len(X) == 5 and  ( abs( X[3]) > OVER_VALUE  or abs( X[4] > OVER_VALUE) ):
+        elif len(X) == 5 and  ( abs( X[3]) > OVER_VALUE  or abs( X[4] ) > OVER_VALUE ):
             cost0 += 1000.0
-        elif len(X) == 7 and  ( abs( X[4]) > OVER_VALUE  or abs( X[5] > OVER_VALUE) or abs( X[6] > OVER_VALUE) ):
+        elif len(X) == 7 and  ( abs( X[4]) > OVER_VALUE  or abs( X[5] ) > OVER_VALUE or abs( X[6] ) > OVER_VALUE ):
             cost0 += 1000.0
         
         if disp :

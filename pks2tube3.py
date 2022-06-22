@@ -127,13 +127,13 @@ if __name__ == '__main__':
     # set expect target value
     if args.peaks is not None:
         if len(args.peaks) == 4:
-            peaks_target=np.array(args.peaks)
+            peaks_target=np.sort(np.array(args.peaks))
             NUM_TUBE=4
         elif len(args.peaks) == 3:
-            peaks_target=np.array(args.peaks)
+            peaks_target=np.sort(np.array(args.peaks))
             NUM_TUBE=3
         elif len(args.peaks) == 2:
-            peaks_target=np.array(args.peaks)
+            peaks_target=np.sort(np.array(args.peaks))
             NUM_TUBE=2
         else:
             print ('error: len(peaks) must be 2 or 3 or 4, due to two three four tube.')
@@ -143,7 +143,7 @@ if __name__ == '__main__':
         peaks_target=np.array([531,673,815 ])
         NUM_TUBE=3
         
-    # instance three tube model
+    # instance tube model
     tube= compute_tube_peak(NUM_TUBE=NUM_TUBE)  #, disp=True)
     # load pre-computed grid data
     path0= 'pks_dpks_stack_tube_use_ratio' + str(NUM_TUBE) + '.npz'

@@ -14,7 +14,7 @@ python pre_compute3.py   -t [number of tube]
 It will save pks_dpks_stack_tube_use_ratio[number of tube].npz.  
 
 
-estimate two three four tubes model from peak frequency.  
+estimate two three four tube model from peak frequency.  
 ```
 python pks2tube3.py  --peaks [list of peak frequency]
 ```

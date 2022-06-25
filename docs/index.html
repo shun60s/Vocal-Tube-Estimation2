@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vocal Tube Estimation 2   </title>
+<meta name="description" content="Estimation of two three four tube model from peak frequency." />
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-lg px-3 my-5 markdown-body">
+<h1>Vocal Tube Estimation 2   </h1>
+
+<p>Estimation of two three four tube model from peak frequency.<br />
+This version uses peak frequency ratio instead of absolute value.<br /></p>
+
+<p><a href="https://github.com/shun60s/Vocal-Tube-Estimation2/">github repository</a><br /></p>
+
+<h2>usage   </h2>
+
+<p>make precomputed data of grid search to set initial value of downhill simplex method to estimate tube area and tube length.  <br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python pre_compute3.py   -t [number of tube]
+</code></pre></div></div>
+<p>[number of tube] is 2 or 3 or 4.<br />
+It will save pks_dpks_stack_tube_use_ratio[number of tube].npz.<br /></p>
+
+
+<p>estimate two three four tube model from peak frequency.<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python pks2tube3.py  --peaks [list of peak frequency]
+</code></pre></div></div>
+<p>Number of elements in  [list of peak frequency] is as same as number of tube.<br />
+It will show an example of tube area and tube length.<br />
+In frequency response figure, cyan x mark means target peak frequency, and red dot mark means estimation result. They may differ some.  'min cost' means average of their difference. <br /></p>
+
+<p>Example 1: three tube model estimation<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python pks2tube3.py  --peaks 523.3 659.358 800
+</code></pre></div></div>
+<p> <img src="figure_800.png" alt="figure1" > <br /></p>
+
+<p>Example 2: three tube model estimation<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python pks2tube3.py  --peaks 523.3 659.358 730
+</code></pre></div></div>
+<p> <img src="figure_730.png" alt="figure2" > <br /></p>
+
+<p>Example 3: four tube model estimation<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python pks2tube3.py  --peaks 700 1100 2600 3300
+</code></pre></div></div>
+<p> <img src="figure_700-4tube.png" alt="figure3" > <br /></p>
+
+<p>Example 4: two tube model estimation<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python pks2tube3.py  --peaks 700 1100
+</code></pre></div></div>
+<p> <img src="figure_700-2tube.png" alt="figure4" > <br /></p>
+
+
+<h2>License    </h2>
+<p>MIT<br /></p>
+
+
+</div>
+</body>
+</html>

@@ -4,6 +4,8 @@ Estimation of five tube model from peak frequency.
 This version uses peak frequency ratio instead of absolute value.  
 Estimation of five tube model is more difficult than estimation of 4 or less tube mode.  
 
+[github repository](https://github.com/shun60s/Vocal-Tube-Estimation2/)  
+
 ## usage   
 
 make precomputed data of grid search to set initial value of downhill simplex method to estimate tube area and tube length.    
@@ -50,6 +52,11 @@ Example 5:
 python pks2tube5.py --peaks 450 780 2500 3000 3800  
 ```
  ![figure_p5](docs/figure_p5.png)   
+ 
+## Note  
+This method estimation result is not always correct for human vocal tract, 
+because there are multiple solutions, combination of tube length and tube area, which meet the peak conditions.
+It may needs to evaluate whether it's reasonable for human vocal tract.  
 
 ## License    
 MIT  

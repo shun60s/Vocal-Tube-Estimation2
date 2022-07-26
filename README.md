@@ -3,6 +3,7 @@
 Estimation of two three four tube model from peak frequency.  
 This version uses peak frequency ratio instead of absolute value.  
 
+[github repository](https://github.com/shun60s/Vocal-Tube-Estimation2/)  
 
 ## usage   
 
@@ -50,6 +51,12 @@ python pks2tube3.py  --peaks 700 1100
     
     
 Regarding to five tube model estimation, see in five_tube folder.   
+
+## Note  
+This method estimation result is not always correct for human vocal tract, 
+because there are multiple solutions, combination of tube length and tube area, which meet the peak conditions.
+It may needs to evaluate whether it's reasonable for human vocal tract.  
+
 
 ## License    
 MIT  
